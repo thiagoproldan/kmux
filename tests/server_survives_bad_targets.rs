@@ -19,7 +19,7 @@
 
 use std::process::{Command, Output};
 
-const BIN: &str = env!("CARGO_BIN_EXE_ztmux");
+const BIN: &str = env!("CARGO_BIN_EXE_kmux");
 
 /// Unique per test so concurrent test threads never share a server.
 fn socket(tag: &str) -> String {

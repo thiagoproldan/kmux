@@ -182,7 +182,7 @@ fn add(args: &[String], socket: &str) -> i32 {
 /// prompt, then calls `triggers add`. No JSON editing. Targets the current
 /// client, so run it from a shell inside the session (or bind a key to it).
 fn wizard(socket: &str) -> i32 {
-    let template = format!("run-shell \"ztmux -S '{socket}' triggers add '%1' '%2' '%3' '%4'\"");
+    let template = format!("run-shell \"kmux -S '{socket}' triggers add '%1' '%2' '%3' '%4'\"");
     match ztmux_cmd(
         socket,
         &[

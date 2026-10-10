@@ -7,5 +7,5 @@ all: $(TESTS)
 
 $(TESTS):
 	# broken tests are ignored for now
-	TEST_TMUX=../target/debug/ztmux sh $*.sh || true
+	TEST_TMUX=../target/debug/kmux sh $*.sh || true
 	sleep 1

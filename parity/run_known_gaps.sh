@@ -37,7 +37,7 @@ trap cleanup EXIT INT TERM
 
 VENDOR_TMUX="$ROOT/vendor/tmux/tmux"
 TMUX_REF="${TMUX_REF:-$VENDOR_TMUX}"
-ZTMUX="${ZTMUX:-$ROOT/target/release/ztmux}"
+ZTMUX="${ZTMUX:-$ROOT/target/release/kmux}"
 if ! command -v "$TMUX_REF" >/dev/null 2>&1 && [[ ! -x "$TMUX_REF" ]]; then
   echo "known-gaps: reference tmux '$TMUX_REF' not found (build vendor/tmux first)" >&2
   exit 2

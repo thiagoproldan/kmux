@@ -369,14 +369,15 @@ fn server_checks(c: &mut Vec<Check>, socket: &str) {
         // namespace it is ours; a foreign path means a real tmux client, which
         // is the classic point of confusion worth flagging.
         let sock_part = v.split(',').next().unwrap_or(&v);
-        if sock_part.contains("ztmux-") {
+        let ours = format!("/{}-", super::socket::SOCKET_DIR_PREFIX);
+        if sock_part.contains(&ours) {
             c.push(Check::ok("server", "$TMUX", v));
         } else {
             c.push(Check::warn(
                 "server",
                 "$TMUX",
                 v,
-                "you are inside a real tmux client; ztmux uses its own ztmux-<uid> namespace",
+                "you are inside a tmux (or ztmux) client; kmux uses its own kmux-<uid> namespace",
             ));
         }
     }

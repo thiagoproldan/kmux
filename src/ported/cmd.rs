@@ -591,10 +591,10 @@ pub unsafe fn cmd_get_alias(name: *const u8) -> *mut u8 {
             const BARE: &[&str] =
                 &["dashboard", "sessions", "switcher", "watch", "events", "repl"];
             let expanded = if BARE.contains(&name_str) {
-                format!("display-popup -E -w 90% -h 90% 'ztmux -S \"${{TMUX%%,*}}\" {name_str}'\0")
+                format!("display-popup -E -w 90% -h 90% 'kmux -S \"${{TMUX%%,*}}\" {name_str}'\0")
             } else {
                 format!(
-                    "display-popup -E -w 90% -h 90% 'ztmux -S \"${{TMUX%%,*}}\" {name_str} | less -R'\0"
+                    "display-popup -E -w 90% -h 90% 'kmux -S \"${{TMUX%%,*}}\" {name_str} | less -R'\0"
                 )
             };
             return xstrdup(expanded.as_bytes().as_ptr()).as_ptr();

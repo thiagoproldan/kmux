@@ -7,7 +7,7 @@
 #
 # Usage: from repo root —  bash parity/run_parity.sh [--summary] [--json OUT] [--fail-log PATH]
 # Env:   TMUX_REF=tmux            reference binary (the real tmux)
-#        ZTMUX=target/release/ztmux   the port binary under test
+#        ZTMUX=target/release/kmux   the port binary under test
 #
 # Cases live in parity/cases/ and come in two flavors:
 #
@@ -115,7 +115,7 @@ if [[ -z "${TMUX_REF:-}" ]]; then
     echo "parity: WARNING falling back to system tmux ($(tmux -V 2>/dev/null || echo '?')); version drift vs the vendored next-3.7 may cause false diffs" >&2
   fi
 fi
-ZTMUX="${ZTMUX:-$ROOT/target/release/ztmux}"
+ZTMUX="${ZTMUX:-$ROOT/target/release/kmux}"
 
 if ! command -v "$TMUX_REF" >/dev/null 2>&1; then
   echo "parity: reference tmux '$TMUX_REF' not found on PATH" >&2

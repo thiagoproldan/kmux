@@ -18,7 +18,7 @@ uses `vendor/tmux/tmux` by default; set `TMUX_REF=/path/to/tmux` to override.
 bash parity/run_parity.sh                 # per-case OK/FAIL + totals
 bash parity/run_parity.sh --summary       # totals only (CI)
 bash parity/run_parity.sh --json parity/parity_summary.json
-ZTMUX=target/debug/ztmux bash parity/run_parity.sh   # test a debug build
+ZTMUX=target/debug/kmux bash parity/run_parity.sh   # test a debug build
 ```
 
 Failure detail (both outputs + unified diff, per case) lands in
@@ -282,7 +282,7 @@ caught.** `verify_one.sh` takes a *path*: given a bare case name it ran
 `bash NAME.sh` for both binaries, both failed identically with `No such file`,
 the byte comparison matched, and it printed `OK`. Every bare-name check was a
 pass no matter what the case said; it now refuses to run on a case file it
-cannot read. And `run_parity.sh` builds `target/release/ztmux` only when that
+cannot read. And `run_parity.sh` builds `target/release/kmux` only when that
 binary is **absent** — it never rebuilds a stale one, so a suite run started
 after a source change measures the previous build. Two runs this round reported
 failures that were only that. Rebuild the release binary yourself before
@@ -694,7 +694,7 @@ does not have, so closing it is a port job rather than a patch. Case 1817 covers
 join-pane's other flags and stops short of `-b`, saying so.
 
 **A harness note worth keeping.** Running `cargo clippy` (or anything else that
-writes to `target/`) while a suite run is in flight removes `target/debug/ztmux`
+writes to `target/`) while a suite run is in flight removes `target/debug/kmux`
 from under it: the run then reports every remaining case as a failure with
 "No such file or directory" on the port side. 79 cases "failed" that way in one
 run here. The numbers are worthless from that point on — rebuild and re-run

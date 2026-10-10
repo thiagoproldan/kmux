@@ -11,6 +11,10 @@
 [workspace]
 exclude = ["vendor"]
 
+# kmux is ztmux under its own name (README.md, Provenance). The package keeps
+# upstream's name, so the library crate, the fuzz crate and every merge from
+# upstream keep theirs; only the binary is kmux. Never published: the name on
+# crates.io is upstream's.
 [package]
 name         = "ztmux"
 version      = "3.7.47"
@@ -20,12 +24,16 @@ edition      = "2024"
 include      = ["/src", "/plugin-abi", "/completions", "/man", "COPYING", "README.md", "build.rs"]
 keywords     = ["tmux"]
 license      = "MIT"
-repository   = "https://github.com/MenkeTechnologies/ztmux"
-homepage     = "https://menketechnologies.github.io/MenkeTechnologiesMeta/ztmux/"
-documentation = "https://docs.rs/ztmux"
+repository   = "https://github.com/thiagoproldan/kmux"
+homepage     = "https://github.com/thiagoproldan/kmux"
 rust-version = "1.88" # let chains
-description  = "A Rust port of tmux — the full terminal multiplexer, server and client"
-publish      = true
+description  = "kmux: a fork of ztmux, a Rust port of tmux, kept close to upstream"
+publish      = false
+autobins     = false
+
+[[bin]]
+name = "kmux"
+path = "src/main.rs"
 
 # Note: most of these features are not supported yet
 # they just exist to make matching upstream's

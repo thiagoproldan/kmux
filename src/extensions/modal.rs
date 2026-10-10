@@ -60,7 +60,7 @@ bind -T resize -N 'exit' Enter  { switch-client -T root }
 bind -T resize -N 'exit' Escape { switch-client -T root }
 bind -T resize -N 'exit' q { switch-client -T root }
 # --- Session mode (Ctrl-o) ---
-bind -T session -N 'session manager' w { display-popup -E -w 80% -h 70% 'ztmux -S "${TMUX%%,*}" sessions' }
+bind -T session -N 'session manager' w { display-popup -E -w 80% -h 70% 'kmux -S "${TMUX%%,*}" sessions' }
 bind -T session -N 'detach' d { detach-client }
 bind -T session -N 'exit' Enter  { switch-client -T root }
 bind -T session -N 'exit' Escape { switch-client -T root }

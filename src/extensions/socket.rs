@@ -32,12 +32,23 @@ pub(crate) unsafe fn socket_from_environment() -> *const u8 {
     CString::new(socket).map_or(null(), |path| path.into_raw().cast())
 }
 
+/// The name of the directory a server's socket lives in, `<prefix>-<uid>`:
+/// kmux's own, so that it neither adopts nor is adopted by a ztmux's
+/// (`ztmux-<uid>`) or a tmux's (`tmux-<uid>`). Every place that makes or
+/// recognises the directory reads it here.
+pub(crate) const SOCKET_DIR_PREFIX: &str = "kmux";
+
+/// `<prefix>-<uid>`, the socket directory's name for `uid`.
+pub(crate) fn socket_dir_name(uid: u32) -> String {
+    format!("{SOCKET_DIR_PREFIX}-{uid}")
+}
+
 /// The socket path out of a `$TMUX` value (`<path>,<pid>,<session>`), if it
-/// lives in ztmux's own `ztmux-<uid>` socket directory.
+/// lives in this build's own socket directory, [`socket_dir_name`].
 fn ztmux_socket(value: &str, uid: u32) -> Option<&str> {
     let socket = value.split(',').next().filter(|s| !s.is_empty())?;
     let parent = std::path::Path::new(socket).parent()?.file_name()?;
-    (parent == std::ffi::OsStr::new(&format!("ztmux-{uid}"))).then_some(socket)
+    (parent == std::ffi::OsStr::new(&socket_dir_name(uid))).then_some(socket)
 }
 
 #[cfg(test)]
@@ -51,22 +62,24 @@ mod tests {
     #[test]
     fn ztmux_socket_adopts_only_its_own() {
         assert_eq!(
-            ztmux_socket("/private/tmp/ztmux-501/pldbg,28344,0", 501),
-            Some("/private/tmp/ztmux-501/pldbg")
+            ztmux_socket("/private/tmp/kmux-501/pldbg,28344,0", 501),
+            Some("/private/tmp/kmux-501/pldbg")
         );
         assert_eq!(
-            ztmux_socket("/private/tmp/ztmux-501/default,1,0", 501),
-            Some("/private/tmp/ztmux-501/default")
+            ztmux_socket("/private/tmp/kmux-501/default,1,0", 501),
+            Some("/private/tmp/kmux-501/default")
         );
         // Real tmux's socket directory, which ztmux must never speak to.
         assert_eq!(ztmux_socket("/private/tmp/tmux-501/default,1,0", 501), None);
-        // Another user's ztmux directory is not ours either.
-        assert_eq!(ztmux_socket("/private/tmp/ztmux-0/default,1,0", 501), None);
+        // Nor a ztmux's: kmux is a fork, and the two may differ in protocol.
+        assert_eq!(ztmux_socket("/private/tmp/ztmux-501/default,1,0", 501), None);
+        // Another user's directory is not ours either.
+        assert_eq!(ztmux_socket("/private/tmp/kmux-0/default,1,0", 501), None);
         // A socket loose in a directory of its own name proves nothing.
         assert_eq!(ztmux_socket("/tmp/mysock,1,0", 501), None);
         // Malformed or empty values resolve to nothing rather than to "".
         assert_eq!(ztmux_socket("", 501), None);
         assert_eq!(ztmux_socket(",1,0", 501), None);
-        assert_eq!(ztmux_socket("ztmux-501,1,0", 501), None);
+        assert_eq!(ztmux_socket("kmux-501,1,0", 501), None);
     }
 }

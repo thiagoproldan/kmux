@@ -1,3 +1,40 @@
+# kmux
+
+kmux is [ztmux](https://github.com/MenkeTechnologies/ztmux), by
+MenkeTechnologies, under its own name. ztmux is a Rust port of
+[tmux](https://github.com/tmux/tmux). kmux exists so that
+[ekko](https://github.com/thiagoproldan/ekko)'s `ekko agents`, which shows its
+sessions in the multiplexer, can rely on one whose fixes it controls. It is
+kept close to upstream and merges from it. Below the line is upstream's README
+as it was at the fork, with only the binary's path changed.
+
+## Provenance
+
+- Forked from ztmux 3.7.47 at 5582e7a. MIT, Copyright (c) 2026
+  MenkeTechnologies: LICENSE is upstream's, kept as it is. tmux's ISC notice is
+  in COPYING.
+- What differs from upstream:
+  - The binary is `kmux`, and `kmux -V` says so. Every key binding, hook and
+    popup that runs the binary names `kmux`; tests/runs_itself_as_kmux.rs fails
+    on any code line that names `ztmux` there, as a merge from upstream would.
+  - A server's socket lives in `kmux-<uid>` (under `$TMUX_TMPDIR`, else /tmp),
+    not `ztmux-<uid>`: a kmux and a ztmux on one machine never share a server
+    or adopt each other's `$TMUX`.
+  - join-pane and break-pane move the pane in its window's list of floating
+    panes too, as tmux's C does. Without it the client drew a joined pane as
+    the outside fill.
+  - test_xcalloc_overflow_panics keeps the pointer it gets, so it passes in a
+    release build too, as Nix's check runs it; upstream's fails there.
+  - No release workflow, and `publish = false`: the package keeps upstream's
+    name, `ztmux`, so that merges stay clean, and that name on crates.io is
+    upstream's.
+  - flake.nix builds it with Nix.
+- What has not changed: messages, help, the manual, the zsh completion and the
+  `@ztmux-*` options still say ztmux, and the configuration files are tmux's
+  (`~/.tmux.conf`, `~/.config/tmux/tmux.conf`).
+
+---
+
 <p align="center"><img src="docs/logo.png" alt="ztmux" width="640"></p>
 
 ```text
@@ -180,7 +217,7 @@ bash parity/verify_one.sh parity/cases/NAME.sh            # one case, in isolati
 bash parity/run_known_gaps.sh                             # the inverted runner: "GAP" is the pass
 ```
 
-The runner uses `target/release/ztmux` and builds it only when that file is **absent**, so
+The runner uses `target/release/kmux` and builds it only when that file is **absent**, so
 rebuild after changing the port or the run measures the previous binary.
 
 Cases live in `parity/cases/` as tmux FORMAT strings (`#{e|+|:2,3}`) or shell scenarios.

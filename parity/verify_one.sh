@@ -16,7 +16,7 @@ if [ ! -f "$case_file" ]; then
   echo "verify_one: pass a path, e.g. parity/cases/$(basename "$case_file")" >&2
   exit 2
 fi
-Z="${ZTMUX:-target/debug/ztmux}"
+Z="${ZTMUX:-target/debug/kmux}"
 T="${TMUX_REF:-vendor/tmux/tmux}"
 export LC_ALL=C LANG=C
 tmpd="$(mktemp -d)"; export TMUX_TMPDIR="$tmpd"

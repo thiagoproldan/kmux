@@ -84,7 +84,7 @@ pub(crate) struct Snapshot {
 
 /// Build a `ztmux -S <socket> <args…>` command against our own binary.
 pub(crate) fn ztmux_cmd(socket: &str, args: &[&str]) -> Command {
-    let exe = std::env::current_exe().unwrap_or_else(|_| std::path::PathBuf::from("ztmux"));
+    let exe = std::env::current_exe().unwrap_or_else(|_| std::path::PathBuf::from("kmux"));
     let mut c = Command::new(exe);
     if !socket.is_empty() {
         c.arg("-S").arg(socket);

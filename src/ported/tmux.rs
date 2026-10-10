@@ -236,7 +236,7 @@ unsafe fn make_label(mut label: *const u8, cause: *mut *mut u8) -> *const u8 {
             paths.truncate(1);
             let mut path = paths.pop().unwrap(); /* can only have one socket! */
 
-            base = format_nul!("{}/ztmux-{}", path.to_string_lossy(), uid);
+            base = format_nul!("{}/{}", path.to_string_lossy(), crate::extensions::socket::socket_dir_name(uid));
             if mkdir(base.cast(), S_IRWXU) != 0 && errno!() != EEXIST {
                 *cause = format_nul!(
                     "couldn't create directory {} ({})",
@@ -534,7 +534,7 @@ pub unsafe fn tmux_main(mut argc: i32, mut argv: *mut *mut u8, _env: *mut *mut u
                 }
                 b'h' => crate::extensions::help::help(),
                 b'V' => {
-                    println!("ztmux {}", getversion());
+                    println!("kmux {}", getversion());
                     std::process::exit(0);
                 }
                 b'l' => flags |= client_flag::LOGIN,

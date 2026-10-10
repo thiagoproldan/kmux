@@ -27,7 +27,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-ZTMUX="${ZTMUX:-./target/release/ztmux}"
+ZTMUX="${ZTMUX:-./target/release/kmux}"
 TMUX_BIN="${TMUX_BIN:-$(command -v tmux)}"
 REPS="${REPS:-50}"
 WINDOWS="${WINDOWS:-20}"

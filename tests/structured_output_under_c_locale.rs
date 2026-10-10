@@ -16,7 +16,7 @@
 
 use std::process::{Command, Output};
 
-const BIN: &str = env!("CARGO_BIN_EXE_ztmux");
+const BIN: &str = env!("CARGO_BIN_EXE_kmux");
 
 fn socket(tag: &str) -> String {
     format!("ztmux-test-{}-{tag}", std::process::id())

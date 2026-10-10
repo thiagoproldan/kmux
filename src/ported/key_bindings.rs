@@ -85,16 +85,16 @@ macro_rules! DEFAULT_PANE_MENU {
             " ''",
             " 'Edit Scrollback in $EDITOR' 'e' {capture-pane -S - -b ztmux-scrollback ; save-buffer -b ztmux-scrollback /tmp/ztmux-scrollback.txt ; delete-buffer -b ztmux-scrollback ; display-popup -E -w 90% -h 90% 'exec ${EDITOR:-${VISUAL:-vi}} /tmp/ztmux-scrollback.txt'}",
             " '#{?@ztmux_sel,Deselect This Pane,Select This Pane for Sync}' 'g' {set -pF @ztmux_sel '#{?@ztmux_sel,,1}'}",
-            " 'Sync Selected Panes' 'y' {run-shell \"ztmux -S #{socket_path} pick sync\"}",
-            " '#{?synchronize-panes,,-}Unsync All Panes' 'U' {run-shell \"ztmux -S #{socket_path} pick clear\"}",
+            " 'Sync Selected Panes' 'y' {run-shell \"kmux -S #{socket_path} pick sync\"}",
+            " '#{?synchronize-panes,,-}Unsync All Panes' 'U' {run-shell \"kmux -S #{socket_path} pick clear\"}",
             " ''",
             " '#{?@ztmux-stacked,Unstack Panes,Stack Panes (zellij)}' 'k' {if -F '#{@ztmux-stacked}' {set -uw @ztmux-stacked ; select-layout even-vertical} {set -w @ztmux-stacked 1 ; select-layout even-vertical ; resize-pane -y 999}}",
-            " '#{?@ztmux-tab-bar,Hide Tab Bar,Tab Bar (zellij)}' 'T' {run-shell \"ztmux -S #{socket_path} tabs toggle\"}",
+            " '#{?@ztmux-tab-bar,Hide Tab Bar,Tab Bar (zellij)}' 'T' {run-shell \"kmux -S #{socket_path} tabs toggle\"}",
             " '#{?pane_floating_flag,Close Floating Pane,New Floating Pane}' 'f' {if -F '#{pane_floating_flag}' {kill-pane} {new-pane -x70% -y60%}}",
             " '#{?@ztmux-float-autohide,Keep Floating Panes Visible,Auto-Hide Floating Panes (zellij)}' 'A' {if -F '#{@ztmux-float-autohide}' {set -uw @ztmux-float-autohide} {set -w @ztmux-float-autohide 1}}",
             " '#{?pane_floating_flag,Centre Floating Pane,}' 'C' {move-pane -P centre}",
             " '#{?pane_floating_flag,Raise Floating Pane,}' 'F' {move-pane -P front}",
-            " 'Open URL / Path from Pane' 'o' {display-popup -E -w 80% -h 60% 'ztmux -S \"${TMUX%%,*}\" open'}",
+            " 'Open URL / Path from Pane' 'o' {display-popup -E -w 80% -h 60% 'kmux -S \"${TMUX%%,*}\" open'}",
         )
     };
 }
@@ -785,7 +785,7 @@ pub unsafe fn key_bindings_init() {
         // DEFAULTS, where it used to sit and quietly falsify the invariant below.
         concat!("bind -n MouseDown3Border { display-menu -O -t= -xM -yM -T '#[align=centre]#{pane_index} (#{pane_id})' ", DEFAULT_PANE_MENU!(), " }"),
 
-        "bind -N 'ztmux: live server dashboard' C-d { display-popup -E -w 90% -h 90% 'ztmux -S \"${TMUX%%,*}\" dashboard' }",
+        "bind -N 'ztmux: live server dashboard' C-d { display-popup -E -w 90% -h 90% 'kmux -S \"${TMUX%%,*}\" dashboard' }",
         // Toggle a real floating pane: a genuine window pane with a floating
         // layout cell, so it can be moved (`move-pane`, M-drag) and resized
         // (`resize-pane`, border drag) like any other pane. Pressing the key
@@ -800,12 +800,12 @@ pub unsafe fn key_bindings_init() {
         // `#{P:...}` loop yields the floating pane's id, empty when there is
         // no float.
         "bind -N 'ztmux: toggle floating pane' C-f { if -F '#{pane_floating_flag}' { select-pane -t '{last}' } { if -F '#{P:#{?pane_floating_flag,1,}}' { select-pane -t '#{P:#{?pane_floating_flag,#{pane_id},}}' } { new-pane -x70% -y60% } } }",
-        "bind -N 'ztmux: session/window/pane picker' S { display-popup -E -w 80% -h 70% 'ztmux -S \"${TMUX%%,*}\" switcher' }",
-        "bind -N 'ztmux: server tree' T { display-popup -E -w 80% -h 80% 'ztmux -S \"${TMUX%%,*}\" tree | less -R' }",
-        "bind -N 'ztmux: environment/server health check' H { display-popup -E -w 80% -h 80% 'ztmux -S \"${TMUX%%,*}\" doctor | less -R' }",
-        "bind -N 'ztmux: live process monitor' W { display-popup -E -w 90% -h 90% 'ztmux -S \"${TMUX%%,*}\" watch' }",
-        "bind -N 'ztmux: server stats' I { display-popup -E -w 80% -h 80% 'ztmux -S \"${TMUX%%,*}\" stats | less -R' }",
-        "bind -N 'ztmux: server graph' G { display-popup -E -w 80% -h 80% 'ztmux -S \"${TMUX%%,*}\" graph | less -R' }",
+        "bind -N 'ztmux: session/window/pane picker' S { display-popup -E -w 80% -h 70% 'kmux -S \"${TMUX%%,*}\" switcher' }",
+        "bind -N 'ztmux: server tree' T { display-popup -E -w 80% -h 80% 'kmux -S \"${TMUX%%,*}\" tree | less -R' }",
+        "bind -N 'ztmux: environment/server health check' H { display-popup -E -w 80% -h 80% 'kmux -S \"${TMUX%%,*}\" doctor | less -R' }",
+        "bind -N 'ztmux: live process monitor' W { display-popup -E -w 90% -h 90% 'kmux -S \"${TMUX%%,*}\" watch' }",
+        "bind -N 'ztmux: server stats' I { display-popup -E -w 80% -h 80% 'kmux -S \"${TMUX%%,*}\" stats | less -R' }",
+        "bind -N 'ztmux: server graph' G { display-popup -E -w 80% -h 80% 'kmux -S \"${TMUX%%,*}\" graph | less -R' }",
         // Edit this pane's full scrollback in $EDITOR. Captured at bind time (so
         // the active pane is the source, before the popup opens), dumped to a
         // file, then opened in $EDITOR inside a popup.
@@ -823,10 +823,10 @@ pub unsafe fn key_bindings_init() {
         // own 'Clear the marked pane' binding at :444, which is exactly what the
         // first line of this comment says not to do.
         "bind -N 'ztmux: select/deselect this pane for sync' C-s { set -pF @ztmux_sel '#{?@ztmux_sel,,1}' ; display-message 'pane #{pane_index} #{?@ztmux_sel,\u{2713} selected for sync,deselected}' }",
-        "bind -N 'ztmux: sync all selected panes' y { run-shell 'ztmux -S \"${TMUX%%,*}\" pick sync' ; display-message 'synced all selected panes' }",
+        "bind -N 'ztmux: sync all selected panes' y { run-shell 'kmux -S \"${TMUX%%,*}\" pick sync' ; display-message 'synced all selected panes' }",
         // Inline trigger wizard: chain four command-prompts (name, pane glob,
         // match regex, action) straight into `triggers add` - no JSON editing.
-        "bind -N 'ztmux: add a content-trigger (inline wizard)' R { command-prompt -p 'trigger name:,pane glob (*):,match regex:,action:' { run-shell \"ztmux -S '#{socket_path}' triggers add '%1' '%2' '%3' '%4'\" } }",
+        "bind -N 'ztmux: add a content-trigger (inline wizard)' R { command-prompt -p 'trigger name:,pane glob (*):,match regex:,action:' { run-shell \"kmux -S '#{socket_path}' triggers add '%1' '%2' '%3' '%4'\" } }",
         // Zellij-style pane stacks (the reference port lives in
         // src/extensions/stack.rs, reachable as `ztmux stack` / `:stack`). The
         // geometry is realised in pure tmux here — equalise the column then grow
@@ -846,7 +846,7 @@ pub unsafe fn key_bindings_init() {
         // pidfile-guarded so re-attaching never starts a second). If
         // `@ztmux-resurrect-restore on` too, that daemon also restores the last
         // snapshot once on start. No-op unless the option is set.
-        "set-hook -ga client-attached { if -F '#{@ztmux-resurrect-auto}' 'run-shell -b \"ztmux -S #{socket_path} resurrect autosave\"' }",
+        "set-hook -ga client-attached { if -F '#{@ztmux-resurrect-auto}' 'run-shell -b \"kmux -S #{socket_path} resurrect autosave\"' }",
     ];
 
     unsafe {

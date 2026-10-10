@@ -28,7 +28,7 @@ def find_binaries():
     if not ztmux:
         here = os.path.dirname(os.path.abspath(__file__))
         root = os.path.abspath(os.path.join(here, "..", ".."))
-        for cand in ("target/release/ztmux", "target/debug/ztmux"):
+        for cand in ("target/release/kmux", "target/debug/kmux"):
             p = os.path.join(root, cand)
             if os.path.exists(p):
                 ztmux = p

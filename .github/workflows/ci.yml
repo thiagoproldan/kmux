@@ -113,7 +113,7 @@ jobs:
       - name: Compare ztmux output to the vendored tmux on parity/cases
         run: bash parity/run_parity.sh --summary --json parity/parity_summary.json --quarantine parity/quarantine.txt
         env:
-          ZTMUX: ${{ github.workspace }}/target/release/ztmux
+          ZTMUX: ${{ github.workspace }}/target/release/kmux
       - name: Upload parity failure log
         if: always()
         uses: actions/upload-artifact@v6
@@ -150,5 +150,5 @@ jobs:
       - run: cargo build --release --locked --target ${{ matrix.target }}
       - uses: actions/upload-artifact@v6
         with:
-          name: ztmux-${{ matrix.target }}
-          path: target/${{ matrix.target }}/release/ztmux
+          name: kmux-${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/kmux

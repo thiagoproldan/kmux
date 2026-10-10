@@ -29,14 +29,14 @@ guard)
   # the stack pointing at the use. No rebuild needed — works on the debug binary.
   # MallocScribble fills freed memory with 0x55 as a second signal. Slow: fine
   # for reproduction, not for daily use.
-  cargo build --bin ztmux
+  cargo build --bin kmux
   echo ">> running debug ztmux under Guard Malloc on socket $SOCK"
   exec env \
     DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib \
     MallocScribble=1 \
     MALLOC_PROTECT_BEFORE=1 \
     MallocGuardEdges=1 \
-    ./target/debug/ztmux -vv -S "$SOCK" "$@"
+    ./target/debug/kmux -vv -S "$SOCK" "$@"
   ;;
 asan)
   # AddressSanitizer: intercepts malloc/free and maintains a quarantine +
@@ -45,7 +45,7 @@ asan)
   # macOS is supported.
   echo ">> building ztmux with AddressSanitizer (nightly)"
   RUSTFLAGS="-Zsanitizer=address" \
-    cargo +nightly build --bin ztmux \
+    cargo +nightly build --bin kmux \
     -Zbuild-std \
     --target aarch64-apple-darwin
   BIN=./target/aarch64-apple-darwin/debug/ztmux

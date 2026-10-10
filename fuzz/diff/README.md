@@ -11,7 +11,7 @@ No Rust build step of its own; it drives the two binaries as subprocesses.
 ## Requirements
 
 - `tmux` on `PATH` (or `$TMUX_BIN`) — the oracle.
-- A built `ztmux` at `target/release/ztmux` / `target/debug/ztmux` (or `$ZTMUX_BIN`):
+- A built `ztmux` at `target/release/kmux` / `target/debug/kmux` (or `$ZTMUX_BIN`):
 
       cargo build --release
 
