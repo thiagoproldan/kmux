@@ -381,8 +381,10 @@ mod tests {
     #[test]
     #[should_panic(expected = "xcalloc")]
     fn test_xcalloc_overflow_panics() {
-        // usize::MAX * 2 overflows; calloc must return NULL.
-        let _ = xcalloc(usize::MAX, 2);
+        // usize::MAX * 2 overflows; calloc must return NULL. The pointer is
+        // kept: a release build drops an allocation nothing reads, its NULL
+        // check with it, and the test then failed there (kmux, 2026-10-10).
+        let _ = std::hint::black_box(xcalloc(usize::MAX, 2));
     }
 
     // C `xmalloc.c:27` xmalloc: returns usable, writable memory of the
