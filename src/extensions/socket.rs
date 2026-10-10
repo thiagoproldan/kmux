@@ -72,7 +72,10 @@ mod tests {
         // Real tmux's socket directory, which ztmux must never speak to.
         assert_eq!(ztmux_socket("/private/tmp/tmux-501/default,1,0", 501), None);
         // Nor a ztmux's: kmux is a fork, and the two may differ in protocol.
-        assert_eq!(ztmux_socket("/private/tmp/ztmux-501/default,1,0", 501), None);
+        assert_eq!(
+            ztmux_socket("/private/tmp/ztmux-501/default,1,0", 501),
+            None
+        );
         // Another user's directory is not ours either.
         assert_eq!(ztmux_socket("/private/tmp/kmux-0/default,1,0", 501), None);
         // A socket loose in a directory of its own name proves nothing.

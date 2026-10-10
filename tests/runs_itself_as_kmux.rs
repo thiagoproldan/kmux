@@ -50,7 +50,10 @@ fn code(line: &str) -> &str {
 #[test]
 fn no_code_line_runs_ztmux() {
     let mut files = Vec::new();
-    rs_files(&Path::new(env!("CARGO_MANIFEST_DIR")).join("src"), &mut files);
+    rs_files(
+        &Path::new(env!("CARGO_MANIFEST_DIR")).join("src"),
+        &mut files,
+    );
     let mut upstream = Vec::new();
     let mut ours = 0;
     for f in &files {
@@ -70,7 +73,11 @@ fn no_code_line_runs_ztmux() {
     );
     // The bindings that run the binary are there to be read: none found means
     // this gate reads the wrong text, not that the rule holds.
-    assert!(ours > 10, "only {ours} code lines run `{RUNS_ITSELF}` in {} files", files.len());
+    assert!(
+        ours > 10,
+        "only {ours} code lines run `{RUNS_ITSELF}` in {} files",
+        files.len()
+    );
 }
 
 #[test]
@@ -102,8 +109,15 @@ fn a_server_lives_in_kmux_uid_and_its_keys_and_hooks_run_kmux() {
             .lines()
             .filter(|l| RUNS_UPSTREAM.iter().any(|p| l.contains(p)))
             .collect();
-        assert!(upstream.is_empty(), "{what} runs `ztmux`:\n{}", upstream.join("\n"));
-        assert!(text.contains(RUNS_ITSELF), "{what} runs no `{RUNS_ITSELF}`:\n{text}");
+        assert!(
+            upstream.is_empty(),
+            "{what} runs `ztmux`:\n{}",
+            upstream.join("\n")
+        );
+        assert!(
+            text.contains(RUNS_ITSELF),
+            "{what} runs no `{RUNS_ITSELF}`:\n{text}"
+        );
     }
 }
 

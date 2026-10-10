@@ -22,16 +22,36 @@ fn session_path(tmp: &Path, sock: &str, cwd: &Path, pwd: Option<&Path>) -> Strin
         .current_dir(cwd)
         .env("TMUX_TMPDIR", tmp)
         .env_remove("TMUX")
-        .args(["-L", sock, "-f", "/dev/null", "new-session", "-d", "-s", "s"]);
+        .args([
+            "-L",
+            sock,
+            "-f",
+            "/dev/null",
+            "new-session",
+            "-d",
+            "-s",
+            "s",
+        ]);
     match pwd {
         Some(pwd) => start.env("PWD", pwd),
         None => start.env_remove("PWD"),
     };
-    assert!(start.status().expect("run kmux").success(), "no server on {sock}");
+    assert!(
+        start.status().expect("run kmux").success(),
+        "no server on {sock}"
+    );
     let read = Command::new(BIN)
         .env("TMUX_TMPDIR", tmp)
         .env_remove("TMUX")
-        .args(["-L", sock, "display-message", "-p", "-t", "s", "#{session_path}"])
+        .args([
+            "-L",
+            sock,
+            "display-message",
+            "-p",
+            "-t",
+            "s",
+            "#{session_path}",
+        ])
         .output()
         .expect("run kmux");
     let _ = Command::new(BIN)
@@ -59,7 +79,11 @@ fn the_session_path_is_pwd_when_it_names_the_cwd_and_the_cwd_otherwise() {
         // $PWD names another directory: stale, so the real cwd.
         ("pwd-other", Some(&other), &real_resolved),
         // $PWD names nothing that exists: the real cwd.
-        ("pwd-gone", Some(Path::new("/nonexistent-kmux-pwd")), &real_resolved),
+        (
+            "pwd-gone",
+            Some(Path::new("/nonexistent-kmux-pwd")),
+            &real_resolved,
+        ),
         // No $PWD: the real cwd.
         ("pwd-unset", None, &real_resolved),
     ];
@@ -67,7 +91,10 @@ fn the_session_path_is_pwd_when_it_names_the_cwd_and_the_cwd_otherwise() {
     for (sock, pwd, want) in cases {
         let got = session_path(&tmp, sock, &real, pwd);
         if got != want.to_string_lossy() {
-            wrong.push(format!("{sock}: PWD={pwd:?} gave [{got}], tmux gives [{}]", want.display()));
+            wrong.push(format!(
+                "{sock}: PWD={pwd:?} gave [{got}], tmux gives [{}]",
+                want.display()
+            ));
         }
     }
     let _ = fs::remove_dir_all(&tmp);
