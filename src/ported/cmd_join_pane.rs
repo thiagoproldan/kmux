@@ -494,14 +494,17 @@ unsafe fn cmd_join_pane_exec(self_: *mut cmd, item: *mut cmdq_item) -> cmd_retva
         server_client_remove_pane(src_wp);
         window_lost_pane(src_w, src_wp);
         tailq_remove::<_, discr_entry>(&raw mut (*src_w).panes, src_wp);
+        tailq_remove::<_, discr_zentry>(&raw mut (*src_w).z_index, src_wp);
 
         (*src_wp).window = dst_w;
         options_set_parent(&mut *(*src_wp).options, (*dst_w).options);
         (*src_wp).flags |= window_pane_flags::PANE_STYLECHANGED;
         if flags.intersects(SPAWN_BEFORE) {
             tailq_insert_before::<_, discr_entry>(dst_wp, src_wp);
+            tailq_insert_before::<_, discr_zentry>(dst_wp, src_wp);
         } else {
             tailq_insert_after::<_, discr_entry>(&raw mut (*dst_w).panes, dst_wp, src_wp);
+            tailq_insert_after::<_, discr_zentry>(&raw mut (*dst_w).z_index, dst_wp, src_wp);
         }
         layout_assign_pane(lc, src_wp, 0);
         colour_palette_from_option(Some(&mut (*src_wp).palette), (*src_wp).options);

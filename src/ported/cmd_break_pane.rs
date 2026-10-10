@@ -161,6 +161,7 @@ pub unsafe fn cmd_break_pane_exec(self_: *mut cmd, item: *mut cmdq_item) -> cmd_
         }
 
         tailq_remove::<_, discr_entry>(&raw mut (*w).panes, wp);
+        tailq_remove::<_, discr_zentry>(&raw mut (*w).z_index, wp);
         server_client_remove_pane(wp);
         window_lost_pane(w, wp);
         layout_close_pane(wp);
@@ -171,6 +172,7 @@ pub unsafe fn cmd_break_pane_exec(self_: *mut cmd, item: *mut cmdq_item) -> cmd_
         options_set_parent(&mut *(*wp).options, (*w).options);
         (*wp).flags |= window_pane_flags::PANE_STYLECHANGED;
         tailq_insert_head::<_, discr_entry>(&raw mut (*w).panes, wp);
+        tailq_insert_head::<_, discr_zentry>(&raw mut (*w).z_index, wp);
         (*w).active = wp;
         (*w).latest = tc as *mut c_void;
 
