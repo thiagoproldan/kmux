@@ -402,7 +402,8 @@ pub fn find_cwd() -> Option<PathBuf> {
         return Some(cwd);
     };
 
-    if resolved1 == resolved2 {
+    // C: `if (strcmp(resolved1, resolved2) != 0) return (cwd);`
+    if resolved1 != resolved2 {
         return Some(cwd);
     }
 

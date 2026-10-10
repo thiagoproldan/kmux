@@ -25,6 +25,11 @@ as it was at the fork, with only the binary's path changed.
     the outside fill.
   - test_xcalloc_overflow_panics keeps the pointer it gets, so it passes in a
     release build too, as Nix's check runs it; upstream's fails there.
+  - A client's working directory is `$PWD` where it names the directory the
+    client runs in, as tmux's `find_cwd` has it; the port had the comparison
+    the other way round, so a folder reached through a symbolic link lost the
+    link, and a stale `$PWD` was taken as the session's path. Run from such a
+    folder, three parity cases differed from tmux.
   - No release workflow, and `publish = false`: the package keeps upstream's
     name, `ztmux`, so that merges stay clean, and that name on crates.io is
     upstream's.
